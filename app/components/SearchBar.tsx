@@ -1,11 +1,13 @@
 /* eslint-disable react/no-unescaped-entities */
-"use client"
+"use client";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
 
 const SearchBar = () => {
   const router = useRouter();
+
   const [location, setLocation] = useState("");
+
   return (
     <div className="text-left text-lg py-3 m-auto flex justify-center">
       <input
@@ -18,8 +20,9 @@ const SearchBar = () => {
       <button
         className="rounded bg-red-600 px-9 py-2 text-white"
         onClick={() => {
-          if (location === "banana") return;
-          router.push("/search");
+          if (location === "") return;
+          router.push(`/search?city=${location}`);
+          setLocation("");
         }}
       >
         Let's go

@@ -4,7 +4,7 @@ const nextConfig = {
     appDir: true,
   },
   images: {
-    domains: ['resizer.otstatic.com'],
+    domains: ['resizer.otstatic.com', "images.otstatic.com"],
   }
 }
 

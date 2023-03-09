@@ -14,7 +14,7 @@ const fetchRestaurantMenu = async (slug: string) => {
     },
   });
   if (!restaurant) {
-    throw new Error("Noe menu");
+    throw new Error("No menu");
   }
   return restaurant;
 };
