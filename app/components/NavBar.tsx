@@ -1,7 +1,8 @@
 "use client";
 
 import Link from "next/link";
-import LoginModal from "./LoginModal";
+import AuthModal from "./AuthModal";
+
 const NavBar = () => {
   return (
     <nav className="bg-white p-2 flex justify-between">
@@ -10,9 +11,8 @@ const NavBar = () => {
       </Link>
       <div>
         <div className="flex">
-         
-          <LoginModal isSignin={true} />
-          <LoginModal isSignin={false} />
+          <AuthModal isSignin={true} />
+          <AuthModal isSignin={false} />
         </div>
       </div>
     </nav>
