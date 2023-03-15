@@ -8,7 +8,7 @@ export async function GET(req: NextRequest) {
   });
 }
 
-export async function POST(request: NextRequest, response: NextResponse) {
+export async function POST(request: NextRequest) {
   const { firstName, lastName, email, phone, city, password } =
     await request.json();
   const errors: string[] = [];
