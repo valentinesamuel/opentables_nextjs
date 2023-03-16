@@ -13,7 +13,7 @@ interface User {
 
 interface State {
   loading: boolean;
-  data: string | null;
+  data: User | null;
   error: string | null;
 }
 

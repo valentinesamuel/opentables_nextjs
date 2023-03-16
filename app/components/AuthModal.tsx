@@ -25,7 +25,7 @@ export default function AuthModal({ isSignin }: { isSignin: boolean }) {
   const [open, setOpen] = useState(false);
   const handleOpen = () => setOpen(true);
   const handleClose = () => setOpen(false);
-  const { signin } = useAuth();
+  const { signin, signup } = useAuth();
 
   const renderContent = (signinContent: string, signupContent: string) => {
     return isSignin ? signinContent : signupContent;
@@ -43,9 +43,13 @@ export default function AuthModal({ isSignin }: { isSignin: boolean }) {
     password: "",
   });
   const [disabled, setDisabled] = useState(true);
-  const handleClick = () =>
-    signin({ email: inputs.email, password: inputs.password }, handleClose);
-
+  const handleClick = () => {
+    if (isSignin) {
+      signin({ email: inputs.email, password: inputs.password }, handleClose);
+    } else {
+      signup(inputs, handleClose);
+    }
+  };
   useEffect(() => {
     if (isSignin) {
       if (inputs.password && inputs.email) {
@@ -96,6 +100,9 @@ export default function AuthModal({ isSignin }: { isSignin: boolean }) {
               <div className="uppercase font-bold text-center pb-2 border-b mb-2">
                 <p className="text-sm  text-red-700">
                   {renderContent("Sign In", "Create Account")}
+                </p>
+                <p>
+                  {data?.firstName} {data?.lastName}
                 </p>
               </div>
               <div className="m-auto">

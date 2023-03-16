@@ -88,7 +88,20 @@ export async function POST(request: NextRequest) {
     .setExpirationTime("24h")
     .sign(secret);
 
-  return NextResponse.json(token);
+ const userObj = {
+   email: user.email,
+   firstName: user.first_name,
+   lastName: user.last_name,
+   phone: user.phone,
+   city: user.city,
+ };
+
+ return NextResponse.json(userObj, {
+   status: 200,
+   headers: {
+     "Set-Cookie": `jwt=${token}; Max-Age=8640; Path=/`,
+   },
+ });
 }
 
 export async function PUT(req: NextRequest) {
