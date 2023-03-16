@@ -1,6 +1,7 @@
 /* eslint-disable react-hooks/exhaustive-deps */
 "use client";
 import useAuth from "@/hook/useAuth";
+import { CircularProgress } from "@mui/material";
 import Box from "@mui/material/Box";
 import Modal from "@mui/material/Modal";
 import { ChangeEvent, useContext, useEffect, useState } from "react";
@@ -20,7 +21,7 @@ const style = {
 };
 
 export default function AuthModal({ isSignin }: { isSignin: boolean }) {
-  const {error} = useContext(AuthenticationContext)
+  const { error, data, loading } = useContext(AuthenticationContext);
   const [open, setOpen] = useState(false);
   const handleOpen = () => setOpen(true);
   const handleClose = () => setOpen(false);
@@ -83,33 +84,37 @@ export default function AuthModal({ isSignin }: { isSignin: boolean }) {
         aria-describedby="modal-modal-description"
       >
         <Box sx={style}>
-          <div className="p-2">
-            <div className="uppercase font-bold text-center pb-2 border-b mb-2">
-              <p className="text-sm  text-red-700">
-                {renderContent("Sign In", "Create Account")}
-              </p>
-            </div>
-            <div className="m-auto">
-              <h2 className="text-2xl font-light text-center ">
-                {renderContent("Log Into Account", "Create Account")}
-              </h2>
-              <AuthModalInputs
-                isSignin={isSignin}
-                handleChangeInput={handleChangeInput}
-                inputs={inputs}
-              />
-              <button
-                onClick={handleClick}
-                className="uppercase bg-red-600 w-full text-whi
-                te p-3 rounded text-sm mb-5 disabled:bg-gray-400"
-                disabled={disabled}
-              >
+          {loading ? (
+            <CircularProgress />
+          ) : (
+            <div className="p-2">
+              <div className="uppercase font-bold text-center pb-2 border-b mb-2">
+                <p className="text-sm  text-red-700">
+                  {renderContent("Sign In", "Create Account")}
+                </p>
+              </div>
+              <div className="m-auto">
                 <h2 className="text-2xl font-light text-center ">
-                  {renderContent("Sign In", "Sign Up")}
+                  {renderContent("Log Into Account", "Create Account")}
                 </h2>
-              </button>
+                <AuthModalInputs
+                  isSignin={isSignin}
+                  handleChangeInput={handleChangeInput}
+                  inputs={inputs}
+                />
+                <button
+                  onClick={handleClick}
+                  className="uppercase bg-red-600 w-full text-whi
+                te p-3 rounded text-sm mb-5 disabled:bg-gray-400"
+                  disabled={disabled}
+                >
+                  <h2 className="text-2xl font-light text-center ">
+                    {renderContent("Sign In", "Sign Up")}
+                  </h2>
+                </button>
+              </div>
             </div>
-          </div>
+          )}
         </Box>
       </Modal>
     </div>
