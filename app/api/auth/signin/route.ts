@@ -29,31 +29,44 @@ export async function POST(request: NextRequest) {
     return NextResponse.json({ errorMessage: errors[0] }, { status: 400 });
   }
 
-  const userWithEmail = await prisma.user.findUnique({
+  const user = await prisma.user.findUnique({
     where: {
       email,
     },
   });
-  if (!userWithEmail) {
+  if (!user) {
     return NextResponse.json(
       { errorMessage: "Email or password is invalid" },
       { status: 401 }
     );
   }
-    const isMatch = await bcrypt.compare(password, userWithEmail.password);
-    if (!isMatch) {
-         return NextResponse.json(
-           { errorMessage: "Email or password is invalid" },
-           { status: 401 }
-         );
-    }
+  const isMatch = await bcrypt.compare(password, user.password);
+  if (!isMatch) {
+    return NextResponse.json(
+      { errorMessage: "Email or password is invalid" },
+      { status: 401 }
+    );
+  }
   const alg = "HS256";
   const secret = new TextEncoder().encode(process.env.JWT_SECRET);
 
-  const token = await new jose.SignJWT({ email: userWithEmail.email })
+  const token = await new jose.SignJWT({ email: user.email })
     .setProtectedHeader({ alg })
     .setExpirationTime("24h")
     .sign(secret);
 
-  return NextResponse.json(token);
+  const userObj = {
+    email: user.email,
+    firstName: user.first_name,
+    lastName: user.last_name,
+    phone: user.phone,
+    city: user.city,
+  };
+
+  return NextResponse.json(userObj, {
+    status: 200,
+    headers: {
+      "Set-Cookie": `jwt=${token}; Max-Age=8640; Path=/`,
+    },
+  });
 }
