@@ -3,7 +3,8 @@
 import useAuth from "@/hook/useAuth";
 import Box from "@mui/material/Box";
 import Modal from "@mui/material/Modal";
-import { ChangeEvent, useEffect, useState } from "react";
+import { ChangeEvent, useContext, useEffect, useState } from "react";
+import { AuthenticationContext } from "../context/AuthContext";
 import AuthModalInputs from "./AuthModalInputs";
 
 const style = {
@@ -19,6 +20,7 @@ const style = {
 };
 
 export default function AuthModal({ isSignin }: { isSignin: boolean }) {
+  const {error} = useContext(AuthenticationContext)
   const [open, setOpen] = useState(false);
   const handleOpen = () => setOpen(true);
   const handleClose = () => setOpen(false);
