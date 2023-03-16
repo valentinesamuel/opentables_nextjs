@@ -34,6 +34,14 @@ export async function POST(request: NextRequest) {
       phone: true,
     },
   });
+  if (!user) {
+    return NextResponse.json(
+      {
+        errorMessage: "User not found",
+      },
+      { status: 401 }
+    );
+  }
 
   return NextResponse.json(user);
 }

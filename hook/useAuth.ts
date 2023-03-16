@@ -83,9 +83,11 @@ const useAuth = () => {
     }
   };
 
+
+
   return {
     signin,
-    signup,
+    signup
   };
 };
 
