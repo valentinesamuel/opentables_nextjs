@@ -4,7 +4,7 @@ import jwt from "jsonwebtoken";
 
 const prisma = new PrismaClient();
 
-export async function POST(request: NextRequest) {
+export async function GET(request: NextRequest) {
   const bearerToken = request.headers.get("Authorization");
 
   const token = bearerToken?.split(" ")[1];
@@ -43,5 +43,11 @@ export async function POST(request: NextRequest) {
     );
   }
 
-  return NextResponse.json(user);
+  return NextResponse.json({
+    id: user.id,
+    firstName: user.first_name,
+    lastName: user.last_name,
+    phone: user.phone,
+    city: user.city,
+  });
 }

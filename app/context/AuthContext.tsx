@@ -2,7 +2,7 @@
 "use client";
 import axios from "axios";
 import { useState, createContext, useEffect } from "react";
-import { NextRequest, NextResponse } from "next/server";
+import { getCookie } from "cookies-next";
 
 interface User {
   id: number;
@@ -48,26 +48,25 @@ export default function AuthContext({
       loading: true,
     });
     try {
-      let request  = NextRequest;
-      console.log(request);
-      // const jwt = cookies().get("jwt")?.value;
-      // if (!jwt) {
-      //   return setAuthState({
-      //     data: null,
-      //     error: null,
-      //     loading: false,
-      //   });
-      // }
-      // const response = axios.get("http://localhost:1234/api/auth/me", {
-      //   headers: {
-      //     Authorization: `Bearer ${jwt}`,
-      //   },
-      // });
+      const jwt = getCookie("jwt");
+      if (!jwt) {
+        return setAuthState({
+          data: null,
+          error: null,
+          loading: false,
+        });
+      }
+      const response = axios.get("http://localhost:1234/api/auth/me", {
+        headers: {
+          Authorization: `Bearer ${jwt}`,
+        },
+      });
 
-      // axios.defaults.headers.common["Authorization"] = `Bearer ${jwt}`;
+      axios.defaults.headers.common["Authorization"] = `Bearer ${jwt}`;
+console.log((await response).data);
 
       setAuthState({
-        data: null,
+        data: (await response).data,
         error: null,
         loading: false,
       });
