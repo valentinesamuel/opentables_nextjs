@@ -78,7 +78,21 @@ export async function GET(request: NextRequest, context: { params: any }) {
       { status: 400 }
     );
   }
-  const tables = restaurant?.tables
+  const tables = restaurant?.tables;
 
-  return NextResponse.json({ searchTimes, bookings, bookinTablesObj, tables });
+  const searchTimesWithTables = searchTimes.map((searchTime) => {
+    return {
+      date: new Date(`${day}T${searchTime}`),
+      time: searchTime,
+      tables,
+    };
+  });
+
+  return NextResponse.json({
+    searchTimes,
+    bookings,
+    bookinTablesObj,
+    tables,
+    searchTimesWithTables,
+  });
 }
