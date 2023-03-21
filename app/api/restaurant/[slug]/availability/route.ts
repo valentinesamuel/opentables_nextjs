@@ -44,9 +44,21 @@ export async function GET(request: NextRequest, context: { params: any }) {
     select: {
       number_of_people: true,
       booking_time: true,
-      tables: true
-    }
+      tables: true,
+    },
   });
 
-  return NextResponse.json({ searchTimes, bookings });
+  const bookinTablesObj: { [key: string]: { [key: number]: true } } = {};
+  bookings.forEach((booking) => {
+    bookinTablesObj[booking.booking_time.toISOString()] = booking.tables.reduce(
+      (obj, table) => {
+        return {
+          ...obj,
+          [table.table_id]: true,
+        };
+      },
+      {}
+    );
+  });
+  return NextResponse.json({ searchTimes, bookings, bookinTablesObj });
 }
