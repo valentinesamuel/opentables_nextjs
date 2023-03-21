@@ -1,3 +1,4 @@
+import { Restaurant } from "./../../../../restaurant/[slug]/page";
 import { times } from "@/data";
 import { getQueryParams } from "@/utils/getQueryParams";
 import { PrismaClient } from "@prisma/client";
@@ -60,5 +61,24 @@ export async function GET(request: NextRequest, context: { params: any }) {
       {}
     );
   });
-  return NextResponse.json({ searchTimes, bookings, bookinTablesObj });
+  const restaurant = await prisma.restaurant.findUnique({
+    where: {
+      slug,
+    },
+    select: {
+      tables: true,
+    },
+  });
+
+  if (!restaurant) {
+    NextResponse.json(
+      {
+        errorMessage: "Invalid data provided",
+      },
+      { status: 400 }
+    );
+  }
+  const tables = restaurant?.tables
+
+  return NextResponse.json({ searchTimes, bookings, bookinTablesObj, tables });
 }
