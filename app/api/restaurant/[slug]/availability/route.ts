@@ -67,6 +67,8 @@ export async function GET(request: NextRequest, context: { params: any }) {
     },
     select: {
       tables: true,
+      open_time: true,
+      close_time: true,
     },
   });
 
@@ -88,11 +90,34 @@ export async function GET(request: NextRequest, context: { params: any }) {
     };
   });
 
-  return NextResponse.json({
-    searchTimes,
-    bookings,
-    bookinTablesObj,
-    tables,
-    searchTimesWithTables,
+  searchTimesWithTables.forEach((t) => {
+    t.tables = t.tables?.filter((table) => {
+      if (!bookinTablesObj[t.date.toISOString()]) {
+        if (bookinTablesObj[t.date.toISOString()][table.id]) return false;
+      }
+      return true;
+    });
   });
+
+  const availabilities = searchTimesWithTables
+    .map((t) => {
+      const sumSeats = t.tables?.reduce((sum, table) => {
+        return sum + table.seats;
+      }, 0);
+      return {
+        time: t.time,
+        available: sumSeats! >= parseInt(partySize),
+      };
+    })
+    .filter((availability) => {
+      const timeIsAfterOpeningHour =
+        new Date(`${day}T${availability.time}`) >
+        new Date(`${day}T${restaurant?.open_time}`);
+      const timeIsBeforeClosingHour =
+        new Date(`${day}T${availability.time}`) >
+        new Date(`${day}T${restaurant?.close_time}`);
+      return timeIsAfterOpeningHour && timeIsBeforeClosingHour;
+    });
+
+  return NextResponse.json(availabilities);
 }

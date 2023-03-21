@@ -60,7 +60,7 @@ export default async function RestaurantDetails({
         <Reviews reviews={restaurant.reviews} />
       </div>
       <div className="w-[27%] relative text-reg">
-        <ReservationCard
+        <ReservationCard slug={restaurant.slug}
           openTime={restaurant.open_time}
           closeTime={restaurant.close_time}
         />
