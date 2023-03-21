@@ -6,7 +6,7 @@ import { NextRequest, NextResponse } from "next/server";
 
 const prisma = new PrismaClient();
 
-export async function GET(request: NextRequest, context: { params: any }) {
+export async function GET(request: NextRequest) {
   const { slug, day, time, partySize } = getQueryParams(request.url);
   console.log({ slug, day, time, partySize });
 
