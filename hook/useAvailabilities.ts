@@ -9,6 +9,7 @@ export default function useAvailabilities() {
     { time: string; available: boolean }[] | null
   >(null);
 
+
   const fetchAvailabilities = async ({
     slug,
     partySize,
